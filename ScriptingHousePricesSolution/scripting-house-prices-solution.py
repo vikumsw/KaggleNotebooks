@@ -34,19 +34,20 @@ def HandleMissingValues(df):
     df.fillna(value=values,inplace=True)
 
 
+#Set Configurations
+TargetColumnName = 'SalePrice'        
+TrainCSVPath = '../input/house-prices-advanced-regression-techniques/train.csv'
+TestCSVPath = '../input/house-prices-advanced-regression-techniques/test.csv'
+DropColumnsList = ['Id']   
+key = 'Id'   
+    
 #Read
 train = pd.read_csv(TrainCSVPath) 
 test  = pd.read_csv(TestCSVPath)
 print('Data Reading Done...')
 print('\tTrain Shape:{} \t \n\tTest Shape :{}'.format(train.shape,test.shape))
 
-#Set Configurations
-TargetColumnName = 'SalePrice'        
-TrainCSVPath = '../input/house-prices-advanced-regression-techniques/train.csv'
-TestCSVPath = '../input/house-prices-advanced-regression-techniques/test.csv'
-DropColumnsList = ['Id']
 cat_cols = getObjectColumnsList(train) # Categorical columns : this will be used to perform one hot encoding.
-key = 'Id'
 
 # Dropping rows from Train Data where the target is missing
 print('Dropping rows from Train Data where the target is missing')
