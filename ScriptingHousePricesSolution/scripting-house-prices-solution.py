@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn import metrics
+from sklearn.model_selection import train_test_split
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -39,7 +40,8 @@ TargetColumnName = 'SalePrice'
 TrainCSVPath = '../input/house-prices-advanced-regression-techniques/train.csv'
 TestCSVPath = '../input/house-prices-advanced-regression-techniques/test.csv'
 DropColumnsList = ['Id']   
-key = 'Id'   
+key = 'Id'
+cat_cols = []
     
 #Read
 train = pd.read_csv(TrainCSVPath) 
@@ -90,6 +92,30 @@ print('Get X,y for modelling')
 X=train_data
 y=train.loc[:,TargetColumnName]
 
+
+print('train_test_split')
+train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.25)
+print('\t train_X Shape:{} \t train_y Shape :{}\n \t test_X Shape:{} \t test_y Shape :{}'.format(train_X.shape,train_y.shape,test_X.shape,test_y.shape))
+
+print(test_X['1stFlrSF'].head())
+
+
+print('Let''s Select Single Best Feature')
+import xgboost as xgb
+
+#temp_col = pd.DataFrame(train_X['1stFlrSF'])
+#temp_X = train_X['1stFlrSF','2ndFlrSF']
+
+
+temp_X = pd.DataFrame(train_X['1stFlrSF'])
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.2)
+model_xgb.fit(temp_X,train_y)
+temp_predictions = model_xgb.predict(test_X['1stFlrSF'])
+#print('\t\tRMSE:', np.sqrt(metrics.mean_squared_error(train_y, temp_predictions)))
+
+
+print('Done \n\n')
+""""
 print('Predictive Modeling')
 
 print('\tFit XGBRegressor')
@@ -113,3 +139,4 @@ solution = pd.DataFrame(submission)
 solution.to_csv('submission.csv',index=False)
 
 print('Done!..')
+"""
